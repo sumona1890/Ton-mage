@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ton Mage</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #07111f;
+      color: white;
+      min-height: 100vh;
+      padding-bottom: 85px;
+    }
+
+    .header {
+      padding: 22px 18px;
+      background: linear-gradient(135deg, #102b4d, #07111f);
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .sub {
+      color: #9eb1c7;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .balance {
+      margin: 18px;
+      padding: 22px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #168cff, #6b4cff);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .balance small {
+      opacity: .85;
+    }
+
+    .amount {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 8px 0 18px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .withdraw {
+      background: white;
+      color: #155dcc;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .section {
+      padding: 0 18px;
+      margin-top: 20px;
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      background: #101d2e;
+      border: 1px solid #1d3047;
+      padding: 17px;
+      border-radius: 16px;
+      margin-bottom: 12px;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .task-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #172c45;
+      font-size: 21px;
+    }
+
+    .task-name {
+      font-weight: 700;
+    }
+
+    .reward {
+      color: #43e38a;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .action {
+      background: #168cff;
+      color: white;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .refbox {
+      text-align: center;
+    }
+
+    .refbox h2 {
+      margin: 7px 0;
+    }
+
+    .ref-link {
+      background: #07111f;
+      padding: 12px;
+      border-radius: 10px;
+      color: #8fbfff;
+      margin: 12px 0;
+      word-break: break-all;
+      font-size: 13px;
+    }
+
+    .copy {
+      width: 100%;
+      padding: 12px;
+      background: #168cff;
+      color: white;
+      border-radius: 11px;
+      font-weight: 700;
+    }
+
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: #0b1727;
+      border-top: 1px solid #1d3047;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .nav {
+      background: transparent;
+      color: #7890aa;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .nav span {
+      display: block;
+      font-size: 21px;
+      margin-bottom: 3px;
+    }
+
+    .nav.active {
+      color: #4da3ff;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .notice {
+      margin: 18px;
+      padding: 13px;
+      border-radius: 12px;
+      background: #10263c;
+      color: #a9c0d8;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">🧙 TON MAGE</div>
+    <div class="sub">Earn • Tasks • Referrals</div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="page active">
+
+    <div class="balance">
+      <small>Your Balance</small>
+      <div class="amount">$0.0000</div>
+      <button class="withdraw" onclick="withdraw()">Withdraw</button>
+    </div>
+
+    <div class="section">
+      <div class="title">⚡ Quick Tasks</div>
+
+      <div class="card task">
+        <div class="task-info">
+          <div class="icon">📢</div>
+          <div>
+            <div class="task-name">Join Channel</div>
+            <div class="reward">Reward +$0.005</div>
+          </div>
+        </div>
+        <button class="action" onclick="completeTask()">Start</button>
+      </div>
+
+      <div class="card task">
+        <div class="task-info">
+          <div class="icon">🎁</div>
+          <div>
+            <div class="task-name">Daily Bonus</div>
+            <div class="reward">Reward +$0.005</div>
+          </div>
+        </div>
+        <button class="action" onclick="completeTask()">Claim</button>
+      </div>
+    </div>
+
+    <div class="notice">
+      ℹ️ This is a demo interface. Real payments, withdrawals and user balances
+      require a secure backend and payment integration.
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div id="tasks" class="page">
+    <div class="section">
+      <div class="title">📋 Available Tasks</div>
+
+      <div class="card task">
+        <div class="task-info">
+          <div class="icon">📢</div>
+          <div>
+            <div class="task-name">Join Telegram Channel</div>
+            <div class="reward">+$0.005</div>
+          </div>
+        </div>
+        <button class="action" onclick="completeTask()">Start</button>
+      </div>
+
+      <div class="card task">
+        <div class="task-info">
+          <div class="icon">⭐</div>
+          <div>
+            <div class="task-name">Daily Check-in</div>
+            <div class="reward">+$0.005</div>
+          </div>
+        </div>
+        <button class="action" onclick="completeTask()">Claim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL -->
+  <div id="referrals" class="page">
+    <div class="section">
+      <div class="card refbox">
+        <div style="font-size:45px">👥</div>
+        <h2>Invite Friends</h2>
+        <p style="color:#9eb1c7;margin-top:6px">
+          Invite friends and grow your referral network.
+        </p>
+
+        <div class="ref-link" id="refLink">
+          https://t.me/TonMageBot?start=123456
+        </div>
+
+        <button class="copy" onclick="copyRef()">
+          Copy Referral Link
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="task-name">Total Referrals</div>
+        <div style="font-size:28px;font-weight:800;margin-top:7px">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="profile" class="page">
+    <div class="section">
+      <div class="card">
+        <div class="task-name">👤 Profile</div>
+        <p style="color:#9eb1c7;margin-top:10px">
+          Telegram user
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="task-name">💰 Balance</div>
+        <p style="color:#43e38a;margin-top:8px">$0.0000</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="bottom">
+
+    <button class="nav active" onclick="showPage('home',this)">
+      <span>🏠</span>Home
+    </button>
+
+    <button class="nav" onclick="showPage('tasks',this)">
+      <span>📋</span>Tasks
+    </button>
+
+    <button class="nav" onclick="showPage('referrals',this)">
+      <span>👥</span>Refer
+    </button>
+
+    <button class="nav" onclick="showPage('profile',this)">
+      <span>👤</span>Profile
+    </button>
+
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    function showPage(page, button) {
+      document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("active");
+      });
+
+      document.getElementById(page).classList.add("active");
+
+      document.querySelectorAll(".nav").forEach(n => {
+        n.classList.remove("active");
+      });
+
+      button.classList.add("active");
+    }
+
+    function completeTask() {
+      alert("Task system is currently in demo mode.");
+    }
+
+    function withdraw() {
+      alert("Withdrawal system is not connected yet.");
+    }
+
+    function copyRef() {
+      const link = document.getElementById("refLink").innerText;
+
+      navigator.clipboard.writeText(link).then(() => {
+        alert("Referral link copied!");
+      });
+    }
+  </script>
+
+</body>
+      </html>
